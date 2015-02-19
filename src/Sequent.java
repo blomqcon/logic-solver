@@ -18,6 +18,11 @@ public class Sequent {
 				}
 			}
 		}
+		for(Character var : conclusion.getVariables()) {
+			if(!variables.contains(var)) {
+				variables.add(var);
+			}
+		}
 		
 		initTruthTable();
 	}
@@ -31,19 +36,6 @@ public class Sequent {
 	}
 
 	public boolean isValidSequent() {
-		/*for(int i = 0; i < truthTable.length; i++) {
-			if(!truthTable[i][truthTable[i].length - 1]) {
-				Boolean allTrue = true;
-				for(int j = 0; j < truthTable[i].length; j++) {
-					if(!truthTable[i][j])
-						allTrue = false;
-				}
-				if(allTrue)
-					return false;
-			}
-		}
- 		
-		return true;*/
 		for(int i = 0; i < truthTable.length; i++) {
 			boolean allTrue = true;
 			for(int j = 0; j < truthTable[i].length - 1; j++) {
@@ -68,6 +60,7 @@ public class Sequent {
 			for(int j = 0; j < assumptions.length; j++) {
 				truthTable[i][j] = assumptions[j].getTruthTableValue(variableValues);
 			}
+			//System.out.println(conclusion.right.getTruthTableValue(variableValues));
 			truthTable[i][assumptions.length] = conclusion.getTruthTableValue(variableValues);
 		}
 	}
