@@ -15,7 +15,7 @@ public class Solver {
 		
 		Formula[] assump = {p, q};
 		System.out.println(g);
-		Sequent s = new Sequent(assump, q);
+		Sequent s = new Sequent(assump, g);
 		
 		System.out.println(s.variables);
 		
