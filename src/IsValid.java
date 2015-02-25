@@ -1,3 +1,6 @@
+import Logic.Formula;
+import Logic.Sequent;
+
 
 public class IsValid {
 

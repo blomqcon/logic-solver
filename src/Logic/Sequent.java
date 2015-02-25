@@ -1,10 +1,12 @@
+package Logic;
+
+
 import java.util.*;
 
 public class Sequent {
 	Formula[] assumptions;
 	Formula conclusion;
-	List<Character> variables;
-	Boolean[][] truthTable;
+	public List<Character> variables;
 	
 	public Sequent(Formula[] a, Formula c) {
 		assumptions = a;
@@ -23,8 +25,6 @@ public class Sequent {
 				variables.add(var);
 			}
 		}
-		
-		initTruthTable();
 	}
 	
 	public int getNumNodes() {
@@ -36,6 +36,7 @@ public class Sequent {
 	}
 
 	public boolean isValidSequent() {
+		Boolean[][] truthTable = getSmallTruthTable();
 		for(int i = 0; i < truthTable.length; i++) {
 			boolean allTrue = true;
 			for(int j = 0; j < truthTable[i].length - 1; j++) {
@@ -48,30 +49,27 @@ public class Sequent {
 		return true;
 	}
 	
-	public Boolean[][] getFullTruthTable() {
+	public String[] getFullTruthTable() {
 		int numVariables = variables.size();
 		int rows = (int) Math.pow(2, numVariables);
-		int conclusionCols = conclusion.getNumNodes();
-		int assumptionCols = 0;
-		for(Formula assumption : assumptions) {
-			assumptionCols += assumption.getNumNodes();
-		}
 		
-		Boolean[][] tTable = new Boolean[rows][conclusionCols + assumptionCols];
+		String[] tTable = new String[rows];
+		
 		for(int i = 0; i < rows; i++) {
 			String binaryRow = Integer.toString(i, 2);
 			Map<Character, Boolean> variableValues = getVariableValues(numVariables, binaryRow);
 			
-			for(int j = 0; j < assumptionCols; j++) {
-				truthTable[i][j] = assumptions[j].getTruthTableValue(variableValues);
+			tTable[i] = "";
+			for(Formula assumption : assumptions) {
+				tTable[i] += assumption.getTruthTable(variableValues);
 			}
-			truthTable[i][conclusionCols] = conclusion.getTruthTableValue(variableValues);
+			tTable[i] += conclusion.getTruthTable(variableValues);
 		}
-		
-		return null;
+		return tTable;
 	}
 	
-	private void initTruthTable() {
+	public Boolean[][] getSmallTruthTable() {
+		Boolean[][] truthTable;
 		int numVariables = variables.size();
 		int rows = (int) Math.pow(2, numVariables);
 
@@ -86,6 +84,7 @@ public class Sequent {
 			//System.out.println(conclusion.right.getTruthTableValue(variableValues));
 			truthTable[i][assumptions.length] = conclusion.getTruthTableValue(variableValues);
 		}
+		return truthTable;
 	}
 	
 	private Map<Character, Boolean> getVariableValues(int numVariables, String binaryRow) {

@@ -1,3 +1,5 @@
+package Logic;
+
 import java.util.*;
 
 
@@ -5,7 +7,6 @@ public class Formula {
 	public Formula left;
 	public Formula right;
 	public char connector;
-	//public List<Character> variables;
 	
 	public Formula(String f) {
 		int openParens = 0;
@@ -35,18 +36,14 @@ public class Formula {
 		return f;
 	}
 	
-	private int getNumNodes(Formula f) {
+	public int getNumNodes() {
 		if(this.right == null) {
 			return 1;
 		} else if(this.left == null) {
-			return 1 + getNumNodes(right);
+			return 1 + this.right.getNumNodes();
 		} else {
-			return getNumNodes(left) + getNumNodes(right);
+			return 1 + this.left.getNumNodes() + this.right.getNumNodes();
 		}
-	}
-	
-	public int getNumNodes() {
-		return getNumNodes(this);
 	}
 	
 	public Boolean getTruthTableValue(Map<Character, Boolean> variableValues) {
@@ -63,13 +60,28 @@ public class Formula {
 				return true;
 			}
 		} else if(this.connector == '-') {
-			//System.out.println(this.right);
-			//System.out.println(variableValues.get('Q'));
-			//return true;
 			return !this.right.getTruthTableValue(variableValues);
 		}
 		
 		return null;
+	}
+	
+	public String getTruthTable(Map<Character, Boolean> variableValues) {
+		if(this.right == null) {
+			return truthLetter(this.getTruthTableValue(variableValues));
+		} else if(this.left == null) {
+			return truthLetter(this.getTruthTableValue(variableValues)) + this.right.getTruthTable(variableValues);
+		} else {
+			return this.left.getTruthTable(variableValues) + truthLetter(this.getTruthTableValue(variableValues)) + this.right.getTruthTable(variableValues);
+		}
+	}
+	
+	private static String truthLetter(Boolean a) {
+		if (a) {
+			return "T";
+		} else {
+			return "F";
+		}
 	}
 	
 	public List<Character> getVariables() {
@@ -83,17 +95,17 @@ public class Formula {
 		return vars;
 	}
 	
-	public String toStringHelp() {
+	public String toStringParen() {
 		if(this.right == null) {
 			return "" + connector;
 		} else if(this.left == null) {
-			return connector + right.toStringHelp();
+			return connector + right.toStringParen();
 		}
-		return "(" + left.toStringHelp() + connector + right.toStringHelp() + ")";
+		return "(" + left.toStringParen() + connector + right.toStringParen() + ")";
 	}
 	
 	public String toString() {
-		String f = toStringHelp();
+		String f = toStringParen();
 		return Formula.removeOutsideParens(f);
 	}
 }
