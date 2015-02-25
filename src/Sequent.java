@@ -48,6 +48,29 @@ public class Sequent {
 		return true;
 	}
 	
+	public Boolean[][] getFullTruthTable() {
+		int numVariables = variables.size();
+		int rows = (int) Math.pow(2, numVariables);
+		int conclusionCols = conclusion.getNumNodes();
+		int assumptionCols = 0;
+		for(Formula assumption : assumptions) {
+			assumptionCols += assumption.getNumNodes();
+		}
+		
+		Boolean[][] tTable = new Boolean[rows][conclusionCols + assumptionCols];
+		for(int i = 0; i < rows; i++) {
+			String binaryRow = Integer.toString(i, 2);
+			Map<Character, Boolean> variableValues = getVariableValues(numVariables, binaryRow);
+			
+			for(int j = 0; j < assumptionCols; j++) {
+				truthTable[i][j] = assumptions[j].getTruthTableValue(variableValues);
+			}
+			truthTable[i][conclusionCols] = conclusion.getTruthTableValue(variableValues);
+		}
+		
+		return null;
+	}
+	
 	private void initTruthTable() {
 		int numVariables = variables.size();
 		int rows = (int) Math.pow(2, numVariables);
