@@ -14,7 +14,6 @@ public class IsValid {
 		String[] aS = s[0].split(",");
 		String aC = s[1];
 		
-
 		Formula conclusion = new Formula(aC);
 		Formula[] assumptions = new Formula[aS.length];
 		for(int i = 0; i < aS.length; i++) {

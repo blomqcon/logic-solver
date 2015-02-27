@@ -8,6 +8,10 @@ public class Sequent {
 	Formula conclusion;
 	public List<Character> variables;
 	
+	public Sequent(String f) {
+		this(getAssumptions(f), getConclusion(f));
+	}
+	
 	public Sequent(Formula[] a, Formula c) {
 		assumptions = a;
 		conclusion = c;
@@ -36,7 +40,7 @@ public class Sequent {
 	}
 
 	public boolean isValidSequent() {
-		Boolean[][] truthTable = getSmallTruthTable();
+		Boolean[][] truthTable = getShortTruthTable();
 		for(int i = 0; i < truthTable.length; i++) {
 			boolean allTrue = true;
 			for(int j = 0; j < truthTable[i].length - 1; j++) {
@@ -49,26 +53,8 @@ public class Sequent {
 		return true;
 	}
 	
-	public String[] getFullTruthTable() {
-		int numVariables = variables.size();
-		int rows = (int) Math.pow(2, numVariables);
-		
-		String[] tTable = new String[rows];
-		
-		for(int i = 0; i < rows; i++) {
-			String binaryRow = Integer.toString(i, 2);
-			Map<Character, Boolean> variableValues = getVariableValues(numVariables, binaryRow);
-			
-			tTable[i] = "";
-			for(Formula assumption : assumptions) {
-				tTable[i] += assumption.getTruthTable(variableValues);
-			}
-			tTable[i] += conclusion.getTruthTable(variableValues);
-		}
-		return tTable;
-	}
-	
-	public Boolean[][] getSmallTruthTable() {
+	//Time complexity: O((2^v)n) where v: number of variables, n: number of nodes.
+	public Boolean[][] getShortTruthTable() {
 		Boolean[][] truthTable;
 		int numVariables = variables.size();
 		int rows = (int) Math.pow(2, numVariables);
@@ -77,28 +63,26 @@ public class Sequent {
 		
 		for(int i = 0; i < rows; i++) {
 			String binaryRow = Integer.toString(i, 2);
-			Map<Character, Boolean> variableValues = getVariableValues(numVariables, binaryRow);
+			Map<Character, Boolean> variableValues = Util.getVariableValues(variables, binaryRow);
 			for(int j = 0; j < assumptions.length; j++) {
 				truthTable[i][j] = assumptions[j].getTruthTableValue(variableValues);
 			}
-			//System.out.println(conclusion.right.getTruthTableValue(variableValues));
 			truthTable[i][assumptions.length] = conclusion.getTruthTableValue(variableValues);
 		}
 		return truthTable;
 	}
 	
-	private Map<Character, Boolean> getVariableValues(int numVariables, String binaryRow) {
-		while(numVariables > binaryRow.length()) {
-			binaryRow = "0" + binaryRow;
+	private static Formula[] getAssumptions(String f) {
+		String[] sA = f.split("⊢")[0].split(",");
+		
+		Formula[] assumptions = new Formula[sA.length];
+		for(int i = 0; i < sA.length; i++) {
+			assumptions[i] = new Formula(sA[i]);
 		}
-		Map<Character, Boolean> variableValues = new HashMap<Character, Boolean>();
-		for(int i = 0; i < numVariables; i++) {
-			if(binaryRow.charAt(i) == '1') {
-				variableValues.put(variables.get(i), true);
-			} else {
-				variableValues.put(variables.get(i), false);
-			}
-		}
-		return variableValues;
+		return assumptions;
+	}
+	private static Formula getConclusion(String f) {
+		String sC = f.split("⊢")[1];
+		return new Formula(sC);
 	}
 }

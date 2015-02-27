@@ -12,7 +12,7 @@ public class Formula {
 		int openParens = 0;
 		int index = 0;
 		if(f.charAt(index) == '-') {
-			right = new Formula(Formula.removeOutsideParens(f.substring(1)));
+			right = new Formula(Util.removeOutsideParens(f.substring(1)));
 		} else if(f.length() != 1) {
 			while(openParens != 0 || index == 0) {
 				if(f.charAt(index) == '(') {
@@ -23,17 +23,34 @@ public class Formula {
 				index++;
 			}
 			
-			left = new Formula(Formula.removeOutsideParens(f.substring(0, index)));
-			right = new Formula(Formula.removeOutsideParens(f.substring(index + 1, f.length())));
+			left = new Formula(Util.removeOutsideParens(f.substring(0, index)));
+			right = new Formula(Util.removeOutsideParens(f.substring(index + 1, f.length())));
 		}
 		connector = f.charAt(index);
 	}
+		
+	public String toString() {
+		return Util.removeOutsideParens(this.toStringParen());
+	}
 	
-	private static String removeOutsideParens(String f) {
-		if(f.charAt(0) == '(') {
-			f = f.substring(1, f.length() - 1);
+	public String toStringParen() {
+		if(this.right == null) {
+			return "" + connector;
+		} else if(this.left == null) {
+			return connector + right.toStringParen();
 		}
-		return f;
+		return "(" + left.toStringParen() + connector + right.toStringParen() + ")";
+	}
+	
+	public List<Character> getVariables() {
+		List<Character> vars = new ArrayList<Character>();
+		String f = this.toString();
+		for(int i = 0; i < f.toString().length(); i++) {
+			if(Character.isUpperCase(f.charAt(i)) && !vars.contains(f.charAt(i))) {
+				vars.add(f.charAt(i));
+			}
+		}
+		return vars;
 	}
 	
 	public int getNumNodes() {
@@ -53,7 +70,7 @@ public class Formula {
 			return this.left.getTruthTableValue(variableValues) || this.right.getTruthTableValue(variableValues);
 		} else if(this.connector == '&') {
 			return this.left.getTruthTableValue(variableValues) && this.right.getTruthTableValue(variableValues);
-		} else if(this.connector == '>') {
+		} else if(this.connector == '→') {
 			if(this.left.getTruthTableValue(variableValues)) {
 				return this.right.getTruthTableValue(variableValues);
 			} else {
@@ -66,46 +83,16 @@ public class Formula {
 		return null;
 	}
 	
-	public String getTruthTable(Map<Character, Boolean> variableValues) {
+	public Boolean[] getTruthTableRow(Map<Character, Boolean> variableValues) {
 		if(this.right == null) {
-			return truthLetter(this.getTruthTableValue(variableValues));
+			Boolean[] conn = {this.getTruthTableValue(variableValues)};
+			return conn;
 		} else if(this.left == null) {
-			return truthLetter(this.getTruthTableValue(variableValues)) + this.right.getTruthTable(variableValues);
+			Boolean[] conn = {this.getTruthTableValue(variableValues)};
+			return Util.concatenate(conn, this.right.getTruthTableRow(variableValues));
 		} else {
-			return this.left.getTruthTable(variableValues) + truthLetter(this.getTruthTableValue(variableValues)) + this.right.getTruthTable(variableValues);
+			Boolean[] conn = {this.getTruthTableValue(variableValues)};
+			return Util.concatenate(Util.concatenate(this.left.getTruthTableRow(variableValues), conn), this.right.getTruthTableRow(variableValues));
 		}
-	}
-	
-	private static String truthLetter(Boolean a) {
-		if (a) {
-			return "T";
-		} else {
-			return "F";
-		}
-	}
-	
-	public List<Character> getVariables() {
-		List<Character> vars = new ArrayList<Character>();
-		String f = this.toString();
-		for(int i = 0; i < f.toString().length(); i++) {
-			if(Character.isUpperCase(f.charAt(i)) && !vars.contains(f.charAt(i))) {
-				vars.add(f.charAt(i));
-			}
-		}
-		return vars;
-	}
-	
-	public String toStringParen() {
-		if(this.right == null) {
-			return "" + connector;
-		} else if(this.left == null) {
-			return connector + right.toStringParen();
-		}
-		return "(" + left.toStringParen() + connector + right.toStringParen() + ")";
-	}
-	
-	public String toString() {
-		String f = toStringParen();
-		return Formula.removeOutsideParens(f);
 	}
 }

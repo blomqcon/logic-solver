@@ -1,7 +1,7 @@
 var logicControllers = angular.module('logicControllers', []);
 
 logicControllers.controller("HomeCtrl", ["$scope", "$mdDialog", "$location", "sequentSvc",function ($scope, $mdDialog, $location, sequentSvc) {
-    $scope.sequent = "P, P>Q = Q";
+    $scope.sequent = "P, P→Q ⊢ Q";
     
 	$scope.checkSequent = function (ev) {
 		var sequent = $scope.sequent.replace(/ /g,'');
