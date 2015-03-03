@@ -5,6 +5,10 @@
 
 	$sequent = escapeshellarg($_GET['sequent']);
 	//$sequent = "'P,P→Q⊢Q'";
- 	exec("java IsValid $sequent", $output);
+ 	exec("java GetTruthTable $sequent", $output);
+ 	echo "{\"headers\":";
  	echo $output[0];
+ 	echo ",\"values\":";
+ 	echo $output[1];
+ 	echo "}"
 ?>

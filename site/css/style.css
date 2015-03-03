@@ -1,6 +1,27 @@
-.row {
+h1, h2, h3, h4 {
 	text-align: center;
-	border: 2px solid black;
-	margin-left: auto;
-    margin-right: auto;
+}
+
+.row {
+	
+}
+
+tbody tr:nth-child(odd) {
+   background-color: #eee;
+}
+
+tbody tr:hover {
+	background-color: #ffeb3b;
+}
+
+.green {
+	color: #4CAF50;
+}
+
+.red {
+	color: #F44336;
+}
+
+.yellow {
+	color: #F57F17;
 }

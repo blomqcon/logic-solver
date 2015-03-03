@@ -4,15 +4,24 @@ var logicApp = angular.module('logicApp', [
   'logicServices',
   'logicControllers'
 ]);
+	  
 
-logicApp.config(["$routeProvider",function ($routeProvider) {
+logicApp.config(["$routeProvider", "$mdThemingProvider" ,function ($routeProvider, $mdThemingProvider) {
     $routeProvider.when("/", {
         templateUrl: "partials/home.html",
         controller: "HomeCtrl",
-    }).when("/test", {
-        templateUrl: "partials/test.html",
-        controller: "TestCtrl",
+    }).when("/truth-table", {
+        templateUrl: "partials/truth-table.html",
+        controller: "TruthTableCtrl",
+    }).when("/proof-validate", {
+        templateUrl: "partials/proof-validate.html",
+        controller: "ProofValidteCtrl",
+    }).when("/proof-solve", {
+        templateUrl: "partials/proof-solve.html",
+        controller: "ProofSolveCtrl",
     }).otherwise({
         redirectTo: '/'
       });
+    
+    $mdThemingProvider.theme('default');
 }]);

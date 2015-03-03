@@ -1,10 +1,16 @@
+package Logic;
+
+
 import java.util.*;
 
 public class Sequent {
 	Formula[] assumptions;
 	Formula conclusion;
-	List<Character> variables;
-	Boolean[][] truthTable;
+	public List<Character> variables;
+	
+	public Sequent(String f) {
+		this(getAssumptions(f), getConclusion(f));
+	}
 	
 	public Sequent(Formula[] a, Formula c) {
 		assumptions = a;
@@ -23,8 +29,6 @@ public class Sequent {
 				variables.add(var);
 			}
 		}
-		
-		initTruthTable();
 	}
 	
 	public int getNumNodes() {
@@ -36,6 +40,7 @@ public class Sequent {
 	}
 
 	public boolean isValidSequent() {
+		Boolean[][] truthTable = getShortTruthTable();
 		for(int i = 0; i < truthTable.length; i++) {
 			boolean allTrue = true;
 			for(int j = 0; j < truthTable[i].length - 1; j++) {
@@ -48,7 +53,9 @@ public class Sequent {
 		return true;
 	}
 	
-	private void initTruthTable() {
+	//Time complexity: O((2^v)n) where v: number of variables, n: number of nodes.
+	public Boolean[][] getShortTruthTable() {
+		Boolean[][] truthTable;
 		int numVariables = variables.size();
 		int rows = (int) Math.pow(2, numVariables);
 
@@ -56,27 +63,49 @@ public class Sequent {
 		
 		for(int i = 0; i < rows; i++) {
 			String binaryRow = Integer.toString(i, 2);
-			Map<Character, Boolean> variableValues = getVariableValues(numVariables, binaryRow);
+			Map<Character, Boolean> variableValues = Util.getVariableValues(variables, binaryRow);
 			for(int j = 0; j < assumptions.length; j++) {
 				truthTable[i][j] = assumptions[j].getTruthTableValue(variableValues);
 			}
-			//System.out.println(conclusion.right.getTruthTableValue(variableValues));
 			truthTable[i][assumptions.length] = conclusion.getTruthTableValue(variableValues);
 		}
+		return truthTable;
 	}
 	
-	private Map<Character, Boolean> getVariableValues(int numVariables, String binaryRow) {
-		while(numVariables > binaryRow.length()) {
-			binaryRow = "0" + binaryRow;
+	public String toString() {
+		 String s = "";
+		 for(Formula assumption : assumptions) {
+			 s+= assumption + ", ";
+		 }
+		 s = s.substring(0, s.length()-2);
+		 s += " ⊢ " + conclusion;
+		return s;
+	}
+	
+	private static Formula[] getAssumptions(String f) {
+		validateSequent(f);
+		String[] sA = f.split("⊢")[0].split(",");
+		
+		Formula[] assumptions = new Formula[sA.length];
+		for(int i = 0; i < sA.length; i++) {
+			assumptions[i] = new Formula(sA[i]);
 		}
-		Map<Character, Boolean> variableValues = new HashMap<Character, Boolean>();
-		for(int i = 0; i < numVariables; i++) {
-			if(binaryRow.charAt(i) == '1') {
-				variableValues.put(variables.get(i), true);
-			} else {
-				variableValues.put(variables.get(i), false);
-			}
+		return assumptions;
+	}
+	
+	private static Formula getConclusion(String f) {
+		String sC = f.split("⊢")[1];
+		return new Formula(sC);
+	}
+	
+	private static void validateSequent(String f) {
+		if(!f.contains("⊢")) {
+			throw new IllegalArgumentException("The sequent does not contain a '⊢' connector");
 		}
-		return variableValues;
+		
+		String sC = f.split("⊢")[1];
+		if(sC.length() < 1) {
+			throw new IllegalArgumentException("The sequent does not contain a conclusion");
+		}
 	}
 }

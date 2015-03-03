@@ -1,0 +1,31 @@
+<div class="row">
+    <h2>Truth Table Calculator</h2>
+    <ul class="nav nav-tabs">
+	  <li role="presentation"><a href="#/">Home</a></li>
+	  <li role="presentation" class="active"><a href="#/truth-table/">Truth Tables</a></li>
+	  <li role="presentation"><a href="#/proof-validate">Proof Validation</a></li>
+	  <li role="presentation"><a href="#/proof-solve">Proof Solver</a></li>
+	</ul>
+    <md-content class="md-padding center" layout="row" layout-align="center" layout-sm="column" style="font-size:1.2em">
+	    <md-input-container>
+		 	  <label>Sequent</label>
+	      <input ng-model="sequent" ng-class="">
+	    </md-input-container>
+	    <md-button class="md-raised md-primary" ng-click="checkSequent($event)" style="height:2em; margin-left: 1em;">Valid Sequent?</md-button>
+	</md-content>
+	<h4 ng-bind="message" ng-class="messageColor"></h4>
+	<div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th ng-repeat="header in tableHeaders track by $index">{{ header }}</th>
+				</tr>
+			</thead>
+			<tbody>
+			  <tr ng-repeat="row in tableValues">
+			  	<td ng-repeat="cell in row track by $index">{{ cell }}</td>
+			  </tr>
+			</tbody>
+		</table>
+	</div>
+</div>

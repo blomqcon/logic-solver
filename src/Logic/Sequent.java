@@ -72,7 +72,18 @@ public class Sequent {
 		return truthTable;
 	}
 	
+	public String toString() {
+		 String s = "";
+		 for(Formula assumption : assumptions) {
+			 s+= assumption + ", ";
+		 }
+		 s = s.substring(0, s.length()-2);
+		 s += " ⊢ " + conclusion;
+		return s;
+	}
+	
 	private static Formula[] getAssumptions(String f) {
+		validateSequent(f);
 		String[] sA = f.split("⊢")[0].split(",");
 		
 		Formula[] assumptions = new Formula[sA.length];
@@ -81,8 +92,20 @@ public class Sequent {
 		}
 		return assumptions;
 	}
+	
 	private static Formula getConclusion(String f) {
 		String sC = f.split("⊢")[1];
 		return new Formula(sC);
+	}
+	
+	private static void validateSequent(String f) {
+		if(!f.contains("⊢")) {
+			throw new IllegalArgumentException("The sequent does not contain a '⊢' connector");
+		}
+		
+		String sC = f.split("⊢")[1];
+		if(sC.length() < 1) {
+			throw new IllegalArgumentException("The sequent does not contain a conclusion");
+		}
 	}
 }
