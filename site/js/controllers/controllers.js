@@ -9,6 +9,11 @@ logicControllers.controller("TruthTableCtrl", ["$scope", "$mdDialog", "$location
     $scope.sequent = "P, P→Q ⊢ Q";
     $scope.truthTable = [];
     
+    $scope.logicSymbol = function (ev) {
+    	alert(ev.currentTarget.innerHTML);
+    };
+    
+    
 	$scope.checkSequent = function (ev) {
 		var sequent = $scope.sequent.replace(/ /g,'');
 		
@@ -16,14 +21,14 @@ logicControllers.controller("TruthTableCtrl", ["$scope", "$mdDialog", "$location
         .then(function (isValid) {
     		showAlert(ev, isValid);
         }, function (error) {
-            //console.log(error);
+            console.log(error);
         });
 		
 		sequentSvc.getTruthTable(sequent)
         .then(function (table) {
     		showTable(table);
         }, function (error) {
-            //console.log(error);
+            console.log(error);
         });
 
 		function showAlert(ev, valid) {

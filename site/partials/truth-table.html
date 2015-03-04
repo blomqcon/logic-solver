@@ -6,14 +6,27 @@
 	  <li role="presentation"><a href="#/proof-validate">Proof Validation</a></li>
 	  <li role="presentation"><a href="#/proof-solve">Proof Solver</a></li>
 	</ul>
-    <md-content class="md-padding center" layout="row" layout-align="center" layout-sm="column" style="font-size:1.2em">
-	    <md-input-container>
-		 	  <label>Sequent</label>
-	      <input ng-model="sequent" ng-class="">
-	    </md-input-container>
-	    <md-button class="md-raised md-primary" ng-click="checkSequent($event)" style="height:2em; margin-left: 1em;">Valid Sequent?</md-button>
+    <md-content class="md-padding center" style="font-size:1.2em">
+    	<section layout="row" layout-sm="column" layout-align="center center">
+	    	<md-input-container>
+			 	<label>Sequent</label>
+		      	<input ng-model="sequent" ng-class="">
+		    </md-input-container>
+		    <md-button class="md-raised md-primary" ng-click="checkSequent($event)" style="height:2em; margin-left: 1em;">Valid Sequent?</md-button>
+    	</section>
+    	
+    	<section layout="row" layout-sm="column" layout-align="center center">
+    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)">v</md-button>
+    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)">&</md-button>
+    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)">→</md-button>
+    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)">⊢</md-button>
+    	</section>
+    	
+    	<section layout="row" layout-sm="column" layout-align="center center">
+    		<h4 ng-bind="message" ng-class="messageColor"></h4>
+    	</section>
 	</md-content>
-	<h4 ng-bind="message" ng-class="messageColor"></h4>
+	
 	<div>
 		<table class="table">
 			<thead>
