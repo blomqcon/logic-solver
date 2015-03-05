@@ -6,12 +6,15 @@ h1, h2, h3, h4 {
 	
 }
 
-tbody tr:nth-child(odd) {
-   background-color: #eee;
+
+/*tbody,tr:nth-child(odd)*/
+tbody tr:nth-of-type(odd) {
+   background:rgba(200,200,200,0.5);
+
 }
 
 tbody tr:hover {
-	background-color: #ffeb3b;
+	background:rgba(255,255,116,0.5);
 }
 
 .green {

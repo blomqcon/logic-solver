@@ -10,16 +10,19 @@
     	<section layout="row" layout-sm="column" layout-align="center center">
 	    	<md-input-container>
 			 	<label>Sequent</label>
-		      	<input ng-model="sequent" ng-class="">
+		      	<input id="sequent" ng-model="sequent" ng-class="">
 		    </md-input-container>
 		    <md-button class="md-raised md-primary" ng-click="checkSequent($event)" style="height:2em; margin-left: 1em;">Valid Sequent?</md-button>
+		    <md-progress-circular md-mode="indeterminate" ng-show="loading"></md-progress-circular>
     	</section>
     	
     	<section layout="row" layout-sm="column" layout-align="center center">
-    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)">v</md-button>
-    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)">&</md-button>
-    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)">→</md-button>
-    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)">⊢</md-button>
+    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)" value="-">-</md-button>
+    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)" value="v">v</md-button>
+    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)" value="&">&</md-button>
+    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)" value="→">→</md-button>
+    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)" value="↔">↔</md-button>
+    		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)" value="⊢">⊢</md-button>
     	</section>
     	
     	<section layout="row" layout-sm="column" layout-align="center center">
@@ -29,6 +32,7 @@
 	
 	<div>
 		<table class="table">
+			<col ng-repeat="colColor in tableCols track by $index" style="{{colColor}}" />
 			<thead>
 				<tr>
 					<th ng-repeat="header in tableHeaders track by $index">{{ header }}</th>

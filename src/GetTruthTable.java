@@ -15,6 +15,7 @@ public class GetTruthTable {
 		Sequent sequent = new Sequent(args[0]);
 		TruthTable table = new TruthTable(sequent);
 		System.out.println(Arrays.deepToString(table.getHeaders()));
+		System.out.println(Arrays.toString(table.getMainConnectorIndexs()));
 		System.out.println(Arrays.deepToString(table.getTable()));
 		
 		System.exit(0);

@@ -4,7 +4,7 @@ logicServices.factory('sequentSvc', ["$http","$q","$window",function ($http, $q,
 	
 	function isValid(sequent) {
 		var deferred = $q.defer();
-        $http.get("/blomqcon/logic-solver/api/isValid.php?sequent=" + sequent)
+        $http.get("/blomqcon/logic-solver/api/isValid.php?sequent=" + encodeURIComponent(sequent).replace("&", "%26"))
             .then(function (result) {
             	var valid = result.data;
                 deferred.resolve(valid.trim());
@@ -17,7 +17,7 @@ logicServices.factory('sequentSvc', ["$http","$q","$window",function ($http, $q,
 	
 	function getTruthTable(sequent) {
 		var deferred = $q.defer();
-        $http.get("/blomqcon/logic-solver/api/getTruthTable.php?sequent=" + sequent)
+        $http.get("/blomqcon/logic-solver/api/getTruthTable.php?sequent=" + encodeURIComponent(sequent).replace("&", "%26"))
             .then(function (result) {
             	var table = result.data;
                 deferred.resolve(table);

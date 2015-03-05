@@ -7,13 +7,6 @@ public class TruthTable {
 	String[] headers;
 	Boolean[][] table;
 	
-	//Copy Constructor
-	private TruthTable(TruthTable original) {
-		this.sequent = original.sequent;
-		this.headers = original.headers;
-		this.table = original.table;
-	}
-	
 	//Time complexity: O((2^v)nlog(n)) where v: number of variables, n: number of nodes.
 	public TruthTable(Sequent s) {
 		this.sequent = s;
@@ -46,7 +39,7 @@ public class TruthTable {
 		}
 		
 		int offset = 0;
-		for(int i = 0; i < sSequent.length(); i++) {
+		for(int i = 0; (i < sSequent.length()) && (i - offset < headers.length); i++) {
 			headers[i - offset] += sSequent.charAt(i);
 			if(sSequent.charAt(i) == '(' || sSequent.charAt(i) == ')' || sSequent.charAt(i) == ',' || sSequent.charAt(i) == '⊢' ) {
 				headers[i - offset] += " ";
@@ -57,7 +50,7 @@ public class TruthTable {
 	
 	//Returns a copy of the table
 	public Boolean[][] getTable() {
-		return new TruthTable(this).table;
+		return this.table;
 	}
 	
 	public String[] getHeaders() {
@@ -66,5 +59,17 @@ public class TruthTable {
 			headersInQuotes[i] = "\"" + headers[i] + "\"";
 		}
 		return headersInQuotes;
+	}
+	
+	public int[] getMainConnectorIndexs() {
+		int[] mainConnectors = new int[sequent.assumptions.length + 1];
+		int total = 0;
+		for(int i = 0; i < sequent.assumptions.length; i++) {
+			mainConnectors[i] = total + sequent.assumptions[i].getMainConnectorIndex();
+			total += sequent.assumptions[i].getNumNodes();
+		}
+		mainConnectors[mainConnectors.length - 1] = + total + sequent.conclusion.getMainConnectorIndex();
+		
+		return mainConnectors;
 	}
 }

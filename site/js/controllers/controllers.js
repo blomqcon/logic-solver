@@ -6,16 +6,20 @@ logicControllers.controller("HomeCtrl", ["$scope", "$location", "$window", "test
 
 
 logicControllers.controller("TruthTableCtrl", ["$scope", "$mdDialog", "$location", "sequentSvc",function ($scope, $mdDialog, $location, sequentSvc) {
-    $scope.sequent = "P, P→Q ⊢ Q";
-    $scope.truthTable = [];
+    $scope.loading = false;
+	$scope.sequent = "P, P→Q ⊢ Q";
     
     $scope.logicSymbol = function (ev) {
-    	alert(ev.currentTarget.innerHTML);
+    	$scope.sequent += ev.currentTarget.value;
+    	document.getElementById("sequent").focus();
     };
-    
     
 	$scope.checkSequent = function (ev) {
 		var sequent = $scope.sequent.replace(/ /g,'');
+		$scope.message = "";
+		$scope.tableHeaders = [];
+		$scope.tableValues = [];
+		$scope.loading = true;
 		
 		sequentSvc.isValid(sequent)
         .then(function (isValid) {
@@ -30,52 +34,34 @@ logicControllers.controller("TruthTableCtrl", ["$scope", "$mdDialog", "$location
         }, function (error) {
             console.log(error);
         });
-
+		
 		function showAlert(ev, valid) {
 			if(valid === "true") {
 			    $scope.message = "The sequent is valid.";
 			    $scope.messageColor = "green";
-	            $mdDialog.show(
-	          	      $mdDialog.alert()
-	          	        .title('Sequent valid')
-	          	        .content('The Sequent you entered is valid!')
-	          	        .ariaLabel('Password notification')
-	          	        .ok('Got it!')
-	          	        .targetEvent(ev)
-	          	    )
 	    	} else if(valid === "false"){
 	    		$scope.message = "The sequent is invalid.";
 	    		$scope.messageColor = "red";
-	    		$mdDialog.show(
-	            	      $mdDialog.alert()
-	            	        .title('Sequent Invalid')
-	            	        .content('The Sequent you entered is invalid!')
-	            	        .ariaLabel('Password notification')
-	            	        .ok('Got it!')
-	            	        .targetEvent(ev)
-	            	    )
 	    	} else {
 	    		$scope.message = "The sequent is not well formed."
 	    		$scope.messageColor = "yellow";
-	    		$scope.tableHeaders = "";
-				$scope.tableValues = "";
-	    		$mdDialog.show(
-	            	      $mdDialog.alert()
-	            	        .title('Sequent not well formed')
-	            	        .content("Either the sequent or one of it's formulas is not well formed.")
-	            	        .ariaLabel('Password notification')
-	            	        .ok('Got it!')
-	            	        .targetEvent(ev)
-	            	    )
 	    	}
 	    }
 		
 		function showTable(table) {
+			var cols = [];
+			for(var i = 0; i < table.headers.length; i++) {
+				cols[i] = "";
+			}
+			for(var i = 0; i < table.mainConnectors.length; i++) {
+				cols[table.mainConnectors[i]] = "background-color: #C5CAE9;";
+			}
+			$scope.loading = false;
+			$scope.tableCols = cols;
 			$scope.tableHeaders = table.headers;
 			$scope.tableValues = table.values;
 		}
 	};
-    
 }]);
 
 logicControllers.controller("ProofValidteCtrl", ["$scope", "$location", "$window", "testSvc",function ($scope, $location, $window, testSvc) {

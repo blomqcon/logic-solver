@@ -7,30 +7,58 @@ public class Formula {
 	public Formula left;
 	public Formula right;
 	public char connector;
+	private int mainConnectorIndex;
 	
 	public Formula(String f) {
-		validateFormula(f);
-		int openParens = 0;
-		int index = 0;
-		int leadingNots = 0;
-		
-		while(f.charAt(index) == '-') {
-			if(f.charAt(index + 1) == '(' || f.length() == 2) {
-				right = new Formula(Util.removeOutsideParens(f.substring(index + 1)));
-				break;
-			}
-			index++;
-			leadingNots++;
-			
-			if(f.length() == leadingNots + 1) {
-				index -= (leadingNots);
-				right = new Formula(Util.removeOutsideParens(f.substring(index + 1)));
-				break;
-			}
+		if(f.contains("[^A-Z()v&→↔\\-]")) {
+			throw new IllegalArgumentException("Invalid character in formula construction");
 		}
 		
-		if(f.length() != 1 && right == null) {
-			while(openParens != 0 || index == leadingNots) {
+		mainConnectorIndex = 0;
+		if(f.length() > 1) {
+			if(mainConnectorIsNot(f)) {
+				right = new Formula(Util.removeOutsideParens(f.substring(mainConnectorIndex + 1)));
+			} else {
+				mainConnectorIndex = getMainConnectorIndex(f);
+				left = new Formula(Util.removeOutsideParens(f.substring(0, mainConnectorIndex)));
+				right = new Formula(Util.removeOutsideParens(f.substring(mainConnectorIndex + 1, f.length())));
+			}
+		}
+		connector = f.charAt(mainConnectorIndex);
+		
+		if(!f.equals(this.toString())) {
+			throw new IllegalArgumentException("Formula is not well formed.");
+		}
+	}
+	
+	private Boolean mainConnectorIsNot(String f) {
+		int index = 0;
+		if(f.charAt(index) == '-') {
+			while(f.charAt(index) == '-') {
+				index++;
+			} 
+			Character cIndex = f.charAt(index);
+			if(Character.isUpperCase(cIndex) && index == (f.length() - 1)) {
+				return true;
+			} else if(cIndex == '(' && f.charAt(f.length() - 1) == ')') {
+				return true;
+			}	
+		}
+		return false;
+	}
+	
+	private int getMainConnectorIndex(String f) {
+		int index = 0;
+		while(f.charAt(index) == '-') {
+			index++;
+		}
+		Character cIndex = f.charAt(index);
+		if(Character.isUpperCase(cIndex)) {
+			return index + 1;
+		} else {
+			int openParens = 1;
+			index++;
+			while(openParens != 0) {
 				if(f.charAt(index) == '(') {
 					openParens++;
 				} else if(f.charAt(index) == ')') {
@@ -38,14 +66,7 @@ public class Formula {
 				}
 				index++;
 			}
-			
-			left = new Formula(Util.removeOutsideParens(f.substring(0, index)));
-			right = new Formula(Util.removeOutsideParens(f.substring(index + 1, f.length())));
-		}
-		connector = f.charAt(index);
-		
-		if(!f.equals(this.toString())) {
-			throw new IllegalArgumentException("Formula is not well formed.");
+			return index;
 		}
 	}
 		
@@ -96,6 +117,8 @@ public class Formula {
 			} else {
 				return true;
 			}
+		} else if(this.connector == '↔') {
+			return this.left.getTruthTableValue(variableValues) == this.right.getTruthTableValue(variableValues);
 		} else if(this.connector == '-') {
 			return !this.right.getTruthTableValue(variableValues);
 		}
@@ -115,9 +138,8 @@ public class Formula {
 			return Util.concatenate(Util.concatenate(this.left.getTruthTableRow(variableValues), conn), this.right.getTruthTableRow(variableValues));
 		}
 	}
-	public static void validateFormula(String f) {
-		if(f.contains("[^A-Z()v&→↔\\-]")) {
-			throw new IllegalArgumentException("Invalid character in formula construction");
-		}
+	
+	public int getMainConnectorIndex() {
+		return mainConnectorIndex;
 	}
 }

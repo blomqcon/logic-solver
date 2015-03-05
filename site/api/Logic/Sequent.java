@@ -4,8 +4,8 @@ package Logic;
 import java.util.*;
 
 public class Sequent {
-	Formula[] assumptions;
-	Formula conclusion;
+	public Formula[] assumptions;
+	public Formula conclusion;
 	public List<Character> variables;
 	
 	public Sequent(String f) {
@@ -77,7 +77,9 @@ public class Sequent {
 		 for(Formula assumption : assumptions) {
 			 s+= assumption + ", ";
 		 }
-		 s = s.substring(0, s.length()-2);
+		 if(s.length() > 1) {
+			 s = s.substring(0, s.length()-2);
+		 }
 		 s += " ⊢ " + conclusion;
 		return s;
 	}
@@ -85,9 +87,15 @@ public class Sequent {
 	private static Formula[] getAssumptions(String f) {
 		validateSequent(f);
 		String[] sA = f.split("⊢")[0].split(",");
+		Formula[] assumptions;
 		
-		Formula[] assumptions = new Formula[sA.length];
-		for(int i = 0; i < sA.length; i++) {
+		if(sA[0].equals("")) {
+			assumptions = new Formula[0];
+		} else {
+			assumptions = new Formula[sA.length];
+		}
+		
+		for(int i = 0; i < assumptions.length; i++) {
 			assumptions[i] = new Formula(sA[i]);
 		}
 		return assumptions;

@@ -4,11 +4,12 @@
 	putenv('LC_ALL='.$locale);
 
 	$sequent = escapeshellarg($_GET['sequent']);
-	//$sequent = "'P,P→Q⊢Q'";
  	exec("java GetTruthTable $sequent", $output);
  	echo "{\"headers\":";
  	echo $output[0];
- 	echo ",\"values\":";
+ 	echo ",\"mainConnectors\":";
  	echo $output[1];
+ 	echo ",\"values\":";
+ 	echo $output[2];
  	echo "}"
 ?>
