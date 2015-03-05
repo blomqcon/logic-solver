@@ -32,6 +32,7 @@ logicControllers.controller("TruthTableCtrl", ["$scope", "$mdDialog", "$location
         .then(function (table) {
     		showTable(table);
         }, function (error) {
+        	$scope.loading = false;
             console.log(error);
         });
 		
@@ -49,17 +50,19 @@ logicControllers.controller("TruthTableCtrl", ["$scope", "$mdDialog", "$location
 	    }
 		
 		function showTable(table) {
-			var cols = [];
-			for(var i = 0; i < table.headers.length; i++) {
-				cols[i] = "";
+			if(table) {
+				var cols = [];
+				for(var i = 0; i < table.headers.length; i++) {
+					cols[i] = "";
+				}
+				for(var i = 0; i < table.mainConnectors.length; i++) {
+					cols[table.mainConnectors[i]] = "background-color: #C5CAE9;";
+				}
+				$scope.loading = false;
+				$scope.tableCols = cols;
+				$scope.tableHeaders = table.headers;
+				$scope.tableValues = table.values;
 			}
-			for(var i = 0; i < table.mainConnectors.length; i++) {
-				cols[table.mainConnectors[i]] = "background-color: #C5CAE9;";
-			}
-			$scope.loading = false;
-			$scope.tableCols = cols;
-			$scope.tableHeaders = table.headers;
-			$scope.tableValues = table.values;
 		}
 	};
 }]);
