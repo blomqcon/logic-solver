@@ -1,8 +1,11 @@
 var logicApp = angular.module('logicApp', [
   'ngMaterial',
   'ngRoute',
+  'ngGrid',
   'logicServices',
-  'logicControllers'
+  'logicControllers',
+  'TruthTableCtrl',
+  'ProofValidateCtrl'
 ]);
 	  
 
@@ -15,7 +18,7 @@ logicApp.config(["$routeProvider", "$mdThemingProvider" ,function ($routeProvide
         controller: "TruthTableCtrl",
     }).when("/proof-validate", {
         templateUrl: "partials/proof-validate.html",
-        controller: "ProofValidteCtrl",
+        controller: "ProofValidateCtrl",
     }).when("/proof-solve", {
         templateUrl: "partials/proof-solve.html",
         controller: "ProofSolveCtrl",

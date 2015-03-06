@@ -8,5 +8,22 @@
 	</ul>
 	
 	<p>I'm actively working on this feature. Check the
-	 <a href="https://github.com/blomqcon/logic-solver">GitHub Repository</a> to see progress or contribute.</p>
+	<a href="https://github.com/blomqcon/logic-solver">GitHub Repository</a> to see progress or contribute.</p>
+
+	<div id="proof" class="gridStyle col-sm-12" ng-grid="gridOptions" ></div>
+	<section layout="row" layout-sm="column" layout-align="center center">
+    	<md-input-container>
+		 	<label>Assumptions</label>
+	      	<input ng-model="newAssumptions">
+	    </md-input-container>
+	    <md-input-container>
+		 	<label>Forumla</label>
+	      	<input ng-model="newFormula">
+	    </md-input-container>
+	    <md-input-container>
+		 	<label>Justification</label>
+	      	<input ng-model="newJustification">
+	    </md-input-container>
+	    <md-button class="md-raised md-primary" ng-click="addRow($event)" style="height:2em; margin-left: 1.5em;">Add Line</md-button>
+    </section>
 </div>
