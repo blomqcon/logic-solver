@@ -3,3 +3,6 @@ This is a project I started to solve symbolic logic proofs for the Philosophy 12
 
 ##Demo
 http://students.washington.edu/blomqcon/logic-solver/#/
+
+##Currently Working on
+Things
