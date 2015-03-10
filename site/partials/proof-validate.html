@@ -9,8 +9,15 @@
 	
 	<p>I'm actively working on this feature. Check the
 	<a href="https://github.com/blomqcon/logic-solver">GitHub Repository</a> to see progress or contribute.</p>
-
+	
+	<section layout="row" layout-sm="column" layout-align="center center">
+		   	<md-input-container>
+			 	<label>Sequent</label>
+		      	<input id="sequent" ng-model="sequent" ng-class="">
+		    </md-input-container>
+		</section>	
 	<div id="proof" class="gridStyle col-sm-12" ng-grid="gridOptions" ></div>
+	
 	<section layout="row" layout-sm="column" layout-align="center center">
     	<md-input-container>
 		 	<label>Assumptions</label>
@@ -26,4 +33,11 @@
 	    </md-input-container>
 	    <md-button class="md-raised md-primary" ng-click="addRow($event)" style="height:2em; margin-left: 1.5em;">Add Line</md-button>
     </section>
-</div>
+    <section layout="row" layout-sm="column" layout-align="center center">
+		    <md-button class="md-raised md-primary" ng-click="validateProof($event)" style="height:2em; margin-left: 1em;">Validiate Proof</md-button>
+		    <md-progress-circular md-mode="indeterminate" ng-show="loading"></md-progress-circular>
+    </section>
+    <section layout="row" layout-sm="column" layout-align="center center">
+		    <h4 ng-bind="message" ng-class="messageColor"></h4>
+    </section>
+</diSv>

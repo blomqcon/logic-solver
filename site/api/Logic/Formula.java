@@ -142,4 +142,13 @@ public class Formula {
 	public int getMainConnectorIndex() {
 		return mainConnectorIndex;
 	}
+	
+	public Formula negatedFormula() {
+		String f = this.toString();
+		if(f.length() == 1 || mainConnectorIsNot(f)) {
+			return new Formula("-" + f);
+		} else {
+			return new Formula("-(" + f + ")");
+		}
+	}
 }
