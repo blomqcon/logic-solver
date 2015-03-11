@@ -16,11 +16,12 @@ logicControllers.controller("ProofValidateCtrl", ["$scope", "$location", "$windo
 	};
 		
 	$scope.addRow = function() {
-		var row = {assumptions: $scope.newAssumptions, formula: $scope.newFormula, justification: $scope.newJustification}
+		var row = {assumptions: $scope.newAssumptions, formula: $scope.newFormula, justificationLines: $scope.newJustificationLines, justificationRule: $scope.newJustificationRule}
 		$scope.data.push(row);
 		$scope.newAssumptions = "";
 		$scope.newFormula = "";
-		$scope.newJustification = "";
+		$scope.newJustificationLines = "";
+		$scope.newJustificationRule = "";
 		updateHeight();
 	};
 
@@ -45,7 +46,7 @@ logicControllers.controller("ProofValidateCtrl", ["$scope", "$location", "$windo
 			$scope.message = "The proof is valid";
 		    $scope.messageColor = "green";
 		} else if (proofResponse.result != null) {
-			$scope.message = "There is an error on line " + (proofResponse.lineNumber + 1) + " of the proof: " + proofResponse.result;
+			$scope.message = "There is an error on line " + parseInt(proofResponse.lineNumber + 1) + " of the proof: " + proofResponse.result;
 		    $scope.messageColor = "red";
 		} else {
 			$scope.message = "There was an error validating the proof";
@@ -74,4 +75,6 @@ logicControllers.controller("ProofValidateCtrl", ["$scope", "$location", "$windo
                      {field:'justificationRule', displayName:''},
                      {field:'delete', displayName:'', enableCellEdit: false, cellTemplate: "<md-button md-no-ink class='md-primary' ng-click='removeRow($event)'>x</md-button>"}]
     };
+    
+    $scope.rules = [{name: "A"}, {name: "MPP"}, {name:"MTT"}, {name:"DN"}];
 }]);

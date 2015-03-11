@@ -28,9 +28,12 @@
 	      	<input ng-model="newFormula">
 	    </md-input-container>
 	    <md-input-container>
-		 	<label>Justification</label>
-	      	<input ng-model="newJustification">
+		 	<label>Justification Lines</label>
+	      	<input ng-model="newJustificationLines">
 	    </md-input-container>
+	 	<md-select ng-model="newJustificationRule" placeholder="Rule">
+	 		<md-option ng-value="rule.name" ng-repeat="rule in rules">{{rule.name}}</md-option>
+	 	</md-select>
 	    <md-button class="md-raised md-primary" ng-click="addRow($event)" style="height:2em; margin-left: 1.5em;">Add Line</md-button>
     </section>
     <section layout="row" layout-sm="column" layout-align="center center">

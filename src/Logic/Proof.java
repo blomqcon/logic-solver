@@ -47,6 +47,10 @@ public class Proof {
 				Rules.checkMPP(proofLines, line);
 			} else if(line.justification == Rules.Rule.MTT) {
 				Rules.checkMTT(proofLines, line);
+			}  else if(line.justification == Rules.Rule.DN) {
+				Rules.checkDN(proofLines, line);
+			} else {
+				throw new IllegalArgumentException("Not a valid rule");
 			}
 		} catch (IllegalArgumentException error) {
 			System.out.println(error.getMessage());
