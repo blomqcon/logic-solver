@@ -9,12 +9,12 @@
 	
 	<p>I'm actively working on this feature. Check the
 	<a href="https://github.com/blomqcon/logic-solver">GitHub Repository</a> to see progress or contribute.</p>
-	
 	<section layout="row" layout-sm="column" layout-align="center center">
 		   	<md-input-container>
 			 	<label>Sequent</label>
 		      	<input id="sequent" ng-model="sequent" ng-class="">
 		    </md-input-container>
+		    <md-button class="md-raised md-primary" ng-click="clearAll()" style="height:2em; margin-left: 1em;">Clear All</md-button>
 		</section>	
 	<div id="proof" class="gridStyle col-sm-12" ng-grid="gridOptions" ></div>
 	
@@ -29,9 +29,9 @@
 	    </md-input-container>
 	    <md-input-container>
 		 	<label>Justification Lines</label>
-	      	<input ng-model="newJustificationLines">
+	      	<input ng-disabled="newJustificationRule == 'A'" ng-model="newJustificationLines">
 	    </md-input-container>
-	 	<md-select ng-model="newJustificationRule" placeholder="Rule">
+	 	<md-select ng-model="newJustificationRule" ng-change="updateJustLines();" placeholder="Rule">
 	 		<md-option ng-value="rule.name" ng-repeat="rule in rules">{{rule.name}}</md-option>
 	 	</md-select>
 	    <md-button class="md-raised md-primary" ng-click="addRow($event)" style="height:2em; margin-left: 1.5em;">Add Line</md-button>
@@ -43,4 +43,14 @@
     <section layout="row" layout-sm="column" layout-align="center center">
 		    <h4 ng-bind="message" ng-class="messageColor"></h4>
     </section>
+   	<h3>Usage Notes: </h3>
+   	<ul>
+   		<li>All logic variables should be uppercase letters</li>
+   		<li>When discharging assumptions is appropriate, simply do not list the assumptions in the assumptions column.</li>
+   		<li>In the assumptions and justifications columns, list numbers in a comma separated list.</li>
+   		<li>For MPP and MTT the conditional must be the first justification in the list.</li>
+   		<li>For CP and RAA the assumption must be the first justification in the list.</li>
+   		<li>For vE the first justification should the or statement, the second should be your first assumption, 
+   		the third your first conclusion, the fourth your second assumption and the fifth your second conclusion.</li>
+   	</ul>
 </diSv>

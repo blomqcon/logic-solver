@@ -3,11 +3,19 @@ var logicControllers = angular.module('ProofValidateCtrl', []);
 logicControllers.controller("ProofValidateCtrl", ["$scope", "$location", "$window", "sequentSvc", function ($scope, $location, $window, sequentSvc) {
 	$scope.loading = false;
 	$scope.message = "";
-	$scope.data = [{assumptions: "1", formula: "P → Q", justificationLines: "", justificationRule: "A"},
+	$scope.data = [{assumptions: "1", formula: "Pv(P&Q)", justificationLines: "", justificationRule: "A"},
                 {assumptions: "2", formula: "P", justificationLines: "", justificationRule: "A"},
-                {assumptions: "1, 2", formula: "Q", justificationLines: "1, 2", justificationRule: "MPP"}];
-	$scope.sequent = "P → Q, P ⊢ Q";
+                {assumptions: "3", formula: "P&Q", justificationLines: "", justificationRule: "A"},
+                {assumptions: "3", formula: "P", justificationLines: "3", justificationRule: "&E"},
+                {assumptions: "1", formula: "P", justificationLines: "1, 2, 2, 3, 4", justificationRule: "vE"}];
+	$scope.sequent = "Pv(P&Q) ⊢ P";
 	updateHeight();
+	
+	$scope.clearAll = function() {
+		$scope.data =  [];
+		$scope.sequent = "";
+		updateHeight();
+	}
 	
 	$scope.removeRow = function() {
 	   var index = this.row.rowIndex;
@@ -24,6 +32,12 @@ logicControllers.controller("ProofValidateCtrl", ["$scope", "$location", "$windo
 		$scope.newJustificationRule = "";
 		updateHeight();
 	};
+	
+	$scope.updateJustLines = function() {
+		if($scope.newJustificationRule == "A") {
+			$scope.newJustificationLines = "";	
+		}
+	}
 
 	$scope.validateProof = function (ev) {
 		$scope.loading = true;
@@ -45,8 +59,11 @@ logicControllers.controller("ProofValidateCtrl", ["$scope", "$location", "$windo
 		if(proofResponse.result == "Valid") {
 			$scope.message = "The proof is valid";
 		    $scope.messageColor = "green";
+		} else if (proofResponse.result == "") {
+			$scope.message = "There was an error validating the proof, likely a formula is not well formed";
+			$scope.messageColor = "yellow";
 		} else if (proofResponse.result != null) {
-			$scope.message = "There is an error on line " + parseInt(proofResponse.lineNumber + 1) + " of the proof: " + proofResponse.result;
+			$scope.message = "There is an error on line " + (parseInt(proofResponse.lineNumber) + 1) + " of the proof: " + proofResponse.result;
 		    $scope.messageColor = "red";
 		} else {
 			$scope.message = "There was an error validating the proof";
@@ -65,7 +82,6 @@ logicControllers.controller("ProofValidateCtrl", ["$scope", "$location", "$windo
         enableRowSelection: false,
         enableCellSelection: true,
         enableCellEdit: true,
-        enableFocusedCellEdit: true,
         enableColumnResize: true,
         enableSorting: false,
         columnDefs: [{field: 'assumptions', displayName: 'Assumptions'}, 
@@ -76,5 +92,5 @@ logicControllers.controller("ProofValidateCtrl", ["$scope", "$location", "$windo
                      {field:'delete', displayName:'', enableCellEdit: false, cellTemplate: "<md-button md-no-ink class='md-primary' ng-click='removeRow($event)'>x</md-button>"}]
     };
     
-    $scope.rules = [{name: "A"}, {name: "MPP"}, {name:"MTT"}, {name:"DN"}];
+    $scope.rules = [{name: "A"}, {name: "MPP"}, {name:"MTT"}, {name:"DN"}, {name:"Df ↔"}, {name:"&I"}, {name:"&E"}, {name:"vI"}, {name:"vE"}, {name:"CP"}, {name:"RAA"}];
 }]);

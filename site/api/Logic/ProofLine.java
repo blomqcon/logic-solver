@@ -2,12 +2,12 @@ package Logic;
 
 public class ProofLine {
 
-	int[] restingAssumptions;
+	Integer[] restingAssumptions;
 	Formula formula;
 	Rules.Rule justification;
-	int[] justificationLines;
+	Integer[] justificationLines;
 	
-	public ProofLine(int[] rA, Formula f, Rules.Rule j, int[] jL) {
+	public ProofLine(Integer[] rA, Formula f, Rules.Rule j, Integer[] jL) {
 		this.restingAssumptions = rA;
 		this.formula = f;
 		this.justification = j;

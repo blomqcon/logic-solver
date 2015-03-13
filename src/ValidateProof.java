@@ -22,11 +22,11 @@ public class ValidateProof {
 			try {
 				JSONObject jsonProofLine = json.getJSONObject(i);
 				String sAssumptions = jsonProofLine.getString("assumptions").replaceAll("\\s+","");
-				int rA[];
+				Integer[] rA;
 				if(sAssumptions.equals("")) {
-					rA = new int[0];
+					rA = new Integer[0];
 				} else {
-					rA = new int[sAssumptions.split(",").length];
+					rA = new Integer[sAssumptions.split(",").length];
 				}
 				for(int j = 0; j < rA.length; j++) {
 					rA[j] = Integer.parseInt(sAssumptions.split(",")[j]) - 1;
@@ -37,11 +37,11 @@ public class ValidateProof {
 				Rules.Rule just = Rules.getRule(jsonProofLine.getString("justificationRule").replaceAll("\\s+",""));
 				
 				String sJL = jsonProofLine.getString("justificationLines").replaceAll("\\s+","");
-				int jL[];
+				Integer[] jL;
 				if(sJL.equals("")) {
-					jL = new int[0];
+					jL = new Integer[0];
 				} else {
-					jL = new int[sJL.split(",").length];
+					jL = new Integer[sJL.split(",").length];
 				}
 				for(int j = 0; j < jL.length; j++) {
 					jL[j] = Integer.parseInt(sJL.split(",")[j]) - 1;

@@ -30,10 +30,6 @@ logicServices.factory('sequentSvc', ["$http","$q","$window",function ($http, $q,
 	
 	function validateProof(sequent, proof) {
 		var deferred = $q.defer();
-		console.log("/blomqcon/logic-solver/api/validateProof.php?sequent=" + encodeURIComponent(sequent).replace("&", "%26") +
-        	"&proof=" + encodeURIComponent(proof).replace("&", "%26"));
-		console.log(sequent);
-		console.log(proof);
         $http.get("/blomqcon/logic-solver/api/validateProof.php?sequent=" + encodeURIComponent(sequent).replace("&", "%26") +
         	"&proof=" + encodeURIComponent(proof).replace("&", "%26"))
             .then(function (result) {
