@@ -60,4 +60,21 @@ logicControllers.controller("TruthTableCtrl", ["$scope", "$mdDialog", "$location
 			}
 		}
 	};
+	
+	$scope.loadExample = function(ev) {
+		switch (ev.currentTarget.value) {
+        case "0":
+            $scope.sequent = "P→Q, -Q ⊢ -P";
+            break;
+        case "1":
+            $scope.sequent = "P→Q ⊢ -Q→-P";
+            break;
+        case "2":
+            $scope.sequent = "-(PvQ) ⊢ -P&-Q";
+            break;
+        case "3":
+            $scope.sequent = "-P, PvQ ⊢ Q";
+            break;
+    	}
+	}
 }]);

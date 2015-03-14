@@ -10,12 +10,21 @@
 	<p>I'm actively working on this feature. Check the
 	<a href="https://github.com/blomqcon/logic-solver">GitHub Repository</a> to see progress or contribute.</p>
 	<section layout="row" layout-sm="column" layout-align="center center">
-		   	<md-input-container>
-			 	<label>Sequent</label>
-		      	<input id="sequent" ng-model="sequent" ng-class="">
-		    </md-input-container>
-		    <md-button class="md-raised md-primary" ng-click="clearAll()" style="height:2em; margin-left: 1em;">Clear All</md-button>
-		</section>	
+	   	<md-input-container>
+		 	<label>Sequent</label>
+	      	<input id="sequent" ng-model="sequent" ng-class="">
+	    </md-input-container>
+	    <md-button class="md-raised md-primary" ng-click="clearAll()" style="height:2em; margin-left: 1em;">Clear All</md-button>
+	</section>
+	<section layout="row" layout-sm="column" layout-align="center center">
+   		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)" value="-">-</md-button>
+   		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)" value="v">v</md-button>
+   		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)" value="&">&</md-button>
+   		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)" value="→">→</md-button>
+   		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)" value="↔">↔</md-button>
+   		<md-button md-no-ink class="md-primary logic-symbol" ng-click="logicSymbol($event)" value="⊢">⊢</md-button>	
+   	</section>
+   	
 	<div id="proof" class="gridStyle col-sm-12" ng-grid="gridOptions" ></div>
 	
 	<section layout="row" layout-sm="column" layout-align="center center">
@@ -53,4 +62,11 @@
    		<li>For vE the first justification should the or statement, the second should be your first assumption, 
    		the third your first conclusion, the fourth your second assumption and the fifth your second conclusion.</li>
    	</ul>
+   	
+   	<section layout="row" layout-sm="column" layout-align="center center">
+   		<md-button class="md-primary example" ng-click="loadExample($event)" value="0">Example One: MTT</md-button><br>
+   		<md-button class="md-primary example" ng-click="loadExample($event)" value="1">Example Two: vE</md-button><br>
+   		<md-button class="md-primary example" ng-click="loadExample($event)" value="2">Example Three: CP</md-button><br>
+   		<md-button class="md-primary example" ng-click="loadExample($event)" value="3">Example Four: RAA</md-button><br>
+ 	</section>
 </diSv>

@@ -11,6 +11,11 @@ logicControllers.controller("ProofValidateCtrl", ["$scope", "$location", "$windo
 	$scope.sequent = "Pv(P&Q) ⊢ P";
 	updateHeight();
 	
+	$scope.logicSymbol = function (ev) {
+    	$scope.sequent += ev.currentTarget.value;
+    	document.getElementById("sequent").focus();
+    };
+	
 	$scope.clearAll = function() {
 		$scope.data =  [];
 		$scope.sequent = "";
@@ -93,4 +98,37 @@ logicControllers.controller("ProofValidateCtrl", ["$scope", "$location", "$windo
     };
     
     $scope.rules = [{name: "A"}, {name: "MPP"}, {name:"MTT"}, {name:"DN"}, {name:"Df ↔"}, {name:"&I"}, {name:"&E"}, {name:"vI"}, {name:"vE"}, {name:"CP"}, {name:"RAA"}];
+    
+    $scope.loadExample = function(ev) {
+		switch (ev.currentTarget.value) {
+        case "0":
+            $scope.sequent = "P→Q, -Q ⊢ -P";
+            $scope.data = [{assumptions: "1", formula: "P→Q", justificationLines: "", justificationRule: "A"},
+                           {assumptions: "2", formula: "-Q", justificationLines: "", justificationRule: "A"},
+                           {assumptions: "1, 2", formula: "-P", justificationLines: "1, 2", justificationRule: "MTT"}];
+            break;
+        case "1":
+            $scope.sequent = "Pv(P&Q) ⊢ P";
+            $scope.data = [{assumptions: "1", formula: "Pv(P&Q)", justificationLines: "", justificationRule: "A"},
+                           {assumptions: "2", formula: "P", justificationLines: "", justificationRule: "A"},
+                           {assumptions: "3", formula: "P&Q", justificationLines: "", justificationRule: "A"},
+                           {assumptions: "3", formula: "P", justificationLines: "3", justificationRule: "&E"},
+                           {assumptions: "1", formula: "P", justificationLines: "1, 2, 2, 3, 4", justificationRule: "vE"}];
+            break;
+        case "2":
+            $scope.sequent = "Q ⊢ P→Q";
+            $scope.data = [{assumptions: "1", formula: "Q", justificationLines: "", justificationRule: "A"},
+                           {assumptions: "2", formula: "P", justificationLines: "", justificationRule: "A"},
+                           {assumptions: "1", formula: "P→Q", justificationLines: "2, 1", justificationRule: "CP"}];
+            break;
+        case "3":
+            $scope.sequent = "P ⊢ P";
+            $scope.data = [{assumptions: "1", formula: "P", justificationLines: "", justificationRule: "A"},
+                           {assumptions: "2", formula: "-P", justificationLines: "", justificationRule: "A"},
+                           {assumptions: "1, 2", formula: "P&-P", justificationLines: "1, 2", justificationRule: "&I"},
+                           {assumptions: "1", formula: "--P", justificationLines: "2, 3", justificationRule: "RAA"},
+                           {assumptions: "1", formula: "P", justificationLines: "4", justificationRule: "DN"}];
+            break;
+    	}
+	}
 }]);
